@@ -1,12 +1,7 @@
 <?php
-/*
- * menu.php : modulo de administracion
- * Author: Andres Velasco Gordillo <phantomimo@gmail.com>
- * <c> 2004 SEL-0.1beta
- */
 
 echo "
- <img style=\"float: right;\" src=\"imagenes/logo-top03.png\"> <h3>".AdminModule."</h3>
+<h3>".AdminModule."</h3>
 	<table align=\"center\" class=\"bazul\" cellspacing=\"1\" cellpadding=\"4\"> 	
 		<tr>	<td ><a href=\"index.php\" target=\"_self\">".Home."</a></td>
 				<td style=\"border-left:2px solid #D8D8D8;\"><a href=\"questionform.php\" target=\"_self\">".AddQuestionsForm."</a></td>

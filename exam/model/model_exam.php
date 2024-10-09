@@ -1,10 +1,4 @@
 <?php
-/*
- * model_exam.php
- * Author: Andres Velasco Gordillo <phantomimo@gmail.com>
- * <c> 2004 SEL-0.2beta
- */
-
 require_once('../admin/config.inc.php');
 require_once('../admin/db.php');
 include_once('../admin/funciones.php');

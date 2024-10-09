@@ -1,14 +1,5 @@
 
 <?php
-/*
- * exam.php : modulo de examen 
- * Author: Andres Velasco Gordillo <phantomimo@gmail.com>
-
- * Basado en phpexam de Senthil Nayagam
- * http://sourceforge.net/projects/phpexam/
- 
- * <c> 2004 SEL-0.2beta
- */
 
 require_once('../admin/config.inc.php');
 require_once('../admin/funciones.php');
@@ -209,10 +200,10 @@ if ($_SESSION['alumno'] = 'registered') {
 		echo "<div class=\"bgblue\"><br/><span style=\"font-weight:bold;\">" . $qid . ".</span> " . nl2br($question) . "<br/><br/>\n </div>
 			  <input type=\"hidden\" name=\"qid\" value=\"$qid\">";
 		echo '<div style="padding:10px; font-size:14px;">
-				  <input type="radio" name="answer" id="1" value="1"><label for="1">'.$choice1.'</label><br/>
-				  <input type="radio" name="answer" id="2" value="2"><label for="2">'.$choice2.'</label><br/>
-				  <input type="radio" name="answer" id="3" value="3"><label for="3">'.$choice3.'</label><br/>
-				  <input type="radio" name="answer" id="4" value="4"><label for="4">'.$choice4.'</label><br/>
+				  <input type="radio" name="answer" id="1" value="1"><label for="1">' . $choice1 . '</label><br/>
+				  <input type="radio" name="answer" id="2" value="2"><label for="2">' . $choice2 . '</label><br/>
+				  <input type="radio" name="answer" id="3" value="3"><label for="3">' . $choice3 . '</label><br/>
+				  <input type="radio" name="answer" id="4" value="4"><label for="4">' . $choice4 . '</label><br/>
 			  </div>';
 		echo "<br/>";
 		echo "<input type=\"hidden\" name=\"sessionid\" value=\"$sessionid\">

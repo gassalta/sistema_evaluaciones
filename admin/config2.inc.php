@@ -1,1 +1,0 @@
-localhost, root, "", online, spanish, Instituto Tecnol&oacute;gico de Comit&aacute;n;

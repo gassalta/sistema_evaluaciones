@@ -1,12 +1,7 @@
 <?php
-/*
- * spanish.php : application and module titles
- * Andres Velasco Gordillo <phantomimo@gmail.com> 
- * <c> 2004 SEL-0.1beta
- */
  
 //Nombre de la Aplicacion y Modulos
-define ("Institute","Instituto Tecnológico de Comitán");
+define ("Institute","Instituto TecnolÃ³gico");
 define ("AppTitle", "Sistema de Evaluaciones en L&iacute;nea");
 define ("AdminModule","M&oacute;dulo de Administraci&oacute;n");
 define ("ExamModule","M&oacute;dulo de Examen");
@@ -51,8 +46,8 @@ define ("Logout","Pulsa aqui para terminar el proceso");
 define ("ExamProcessed","Tu evaluacion ya ha sido registrada...");
 define ("ChoiceOption","Elige al menos una opcion");
 
-define ("LOGIN_ERROR","usuario o contraseña incorrectos");
-define ("LOGIN_DATA","Ingrese su nombre de usuario y contraseña");
+define ("LOGIN_ERROR","usuario o contraseÃ±a incorrectos");
+define ("LOGIN_DATA","Ingrese su nombre de usuario y contraseÃ±a");
 define ("FORM_DATA","Ingresa la clave de examen y tu numero de control");
 define ("FORM_ERROR","num de control o clave de examen incorrectos");
 
@@ -60,6 +55,6 @@ define ("FORM_ERROR","num de control o clave de examen incorrectos");
 define ("txtsubmit","Aceptar");
 define ("txtreset","Limpiar");
 
-define ("already_registered", "el alumno ya fue registrado en esta evaluación")
+define ("already_registered", "el alumno ya fue registrado en esta evaluaciï¿½n")
 
 ?>

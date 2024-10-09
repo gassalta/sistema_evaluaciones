@@ -1,14 +1,4 @@
 <?php
-/*
- * questionform.php : modulo de examen 
- * Author: Andres Velasco Gordillo <phantomimo@gmail.com>
-
- * Basado en phpexam de Senthil Nayagam
- * http://sourceforge.net/projects/phpexam/
- 
- * <c> 2004 SEL-0.2beta
- */
-
 session_start();
 if ($_SESSION['admin'] == 'registered') {
 	include('db.php');
@@ -35,7 +25,7 @@ if ($_SESSION['admin'] == 'registered') {
 
 	if ($action == 'edit') {
 		$query =  "SELECT * FROM tbancopreguntas WHERE idpregunta='" . $_REQUEST['id'] . "' ORDER BY idpregunta ASC";
-		$req = mysqli_query($base_selection,$query);
+		$req = mysqli_query($base_selection, $query);
 
 		if ($row = mysqli_fetch_object($req)) {
 			$questionid = $row->idpregunta;
@@ -66,7 +56,7 @@ if ($_SESSION['admin'] == 'registered') {
 	</head>
 
 	<body>
-		<?php include('menu.php'); ?>
+		<?php include('class/menu.php'); ?>
 		<h2>Agregar una pregunta por formulario</h2>
 		<h3>Banco de preguntas</h3>
 
@@ -81,7 +71,7 @@ if ($_SESSION['admin'] == 'registered') {
 					<td>
 						<?php
 						$query = "SELECT * FROM tmaterias";
-						$req1 = mysqli_query($base_selection,$query);
+						$req1 = mysqli_query($base_selection, $query);
 						echo
 						"<select name=\"idmateria\" id=\"select1\" onchange='cargaContenido(this.id)'>\n";
 						echo "<option value=\"\">" . SelSub . "</option>\n";
@@ -102,7 +92,7 @@ if ($_SESSION['admin'] == 'registered') {
 						<?php
 						if (($action == 'edit') || (isset($subjectidedit))) {
 							$sql = "SELECT unidades FROM tmaterias WHERE idmateria = '$subjectidedit'";
-							$req = mysqli_query($base_selection,$sql) or die(mysqli_error() . $sql);
+							$req = mysqli_query($base_selection, $sql) or die(mysqli_error() . $sql);
 							echo "<select name='unidad' id='select2'>";
 							$i = 1;
 							$registro = mysqli_fetch_row($req);

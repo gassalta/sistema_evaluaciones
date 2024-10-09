@@ -1,16 +1,11 @@
 <?php
-/*
- * reportes.php : modulo de administracion  
- * Andres Velasco Gordillo <phantomimo@gmail.com> 
- * <c> 2004,2010 SEL-0.2beta
- */
 
 session_start();
 if  ($_SESSION['admin'] == 'registered'){
 
-	require_once ('config.inc.php');
-	$langfile = "../lang/".$language.".php";
-	require_once ($langfile);
+	require_once ('db.php');
+	$langfile =  dirname(__DIR__)."/lang/" . $language . ".php";
+	require_once($langfile);
 
 ?>
 
@@ -28,7 +23,7 @@ if  ($_SESSION['admin'] == 'registered'){
 <body>
 
 <?php
-include ('menu.php');
+include ('class/menu.php');
 
 if (isset($_REQUEST['enviar']) && ($_REQUEST['idexamen'] <> '')) {
 	$selectbd = mysqli_connect($servidor,$usuario,$password,$basedatos);
