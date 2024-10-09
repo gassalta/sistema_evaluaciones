@@ -1,0 +1,65 @@
+<html>
+<head>
+<!--  BEGIN form -->
+<title>{AppTitle} {ExamModule}</title>
+	<meta http-equiv="Content-Type " content= "text/html; charset=iso-8859-1 ">
+	<link href="../css/estilo.css" rel="stylesheet" content="text/css">
+	<script type="text/javascript">
+	function popup() { 
+	msg=open("","DisplayWindow","toolbar=no,directories=no,menubar=no,progressbar=no,width=280,height=180");
+	msg.document.write("<html><head><title>Acerca de</title></head>");
+	msg.document.write("<body><center><h4><b><c>script php para evaluaciones</b></h4></center>");
+	msg.document.write("<table>");
+	msg.document.write("<tr><td> <b>autor:</b></td> <td>andrés velasco</td></tr>"); 
+	msg.document.write("<tr><td><b>email:</b></td>");
+	msg.document.write("<td><a href=mailto:phantomimo@gmail.com>phantomimo@gmail.com </a></td></tr>"); 
+	msg.document.write("<tr><td><b>licencia:</b></td> <td>GNU/GPL</td></tr>"); 
+	msg.document.write("</table>"); 
+	msg.document.write("<div align='center'><br/><a href='#' onclick='javascript:window.close();'> cerrar </a><br/></div>"); 	
+	msg.document.write("</body></html>"); 
+	}
+	</script>
+</head>
+
+<body onload="document.getElementById('idexamen').focus();">
+<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" style="border: none;">
+<tr height="160" valign="top">
+	<td  class="bgwhite" align="center">	
+		<h1>{Institute}</h1>
+		<h2>{WelcomeExam}</h2>
+		<h3>{Instructions}</h3></td>
+</tr>
+<tr valign="top"><td class="bgwhite" align="center">
+
+<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+<table cellpadding="5" cellspacing="0" border="0" style="width:360px; height:250px; border: 3px solid #174a89;">
+<tr><td class="bgwhite" style="padding: 10px;">
+		<form name="examform" method="post" action="index.php?action=login">
+		<input type="hidden" name="sessionid" value={randval}>
+<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+		 <table cellspacing="0" width="100%" border="0" align="center" style="border: none;"> 				   
+			 <tr><td class="bgwhite">{txtquestionpaperid}</td>
+				 <td><input type="text" name="idexamen" id="idexamen" value="{txtidexamen}" />
+				 <input type="hidden" name="qid" value="0" /></td></tr>
+			 <tr><td class="bgwhite">{txtstudentid}</td>
+				 <td><input type="text" name="numcontrol" id="numcontrol" /></td></tr>				 
+			 <tr> <td class="bgwhite" align="center" colspan="2"><br/>
+				<input type="submit" name="Submit" value="{txtsubmit}"/>
+				<input type="reset" name="Submit2" value="{txtreset}"/> </td></tr>				
+			</form>		
+		</table> 
+<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+		<tr height="40"><td class="bgwhite" valign="middle" align="center"><font color="#ff0000">{message}</font></td></tr>
+		</td></tr>
+</table>
+<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+</td></tr>
+	<tr align="center"> <td class="bgwhite" valign="top">
+	<td></tr>
+</table> 
+<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+<!-- END form -->
+</body>
+</html>
+

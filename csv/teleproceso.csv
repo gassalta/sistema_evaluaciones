@@ -1,0 +1,6 @@
+1,1, Es el cable mas comun utilizado en redes locales por su bajo costo alta fiabilidad y resistencia de entre 100 y 150 ohms, fibra optica, par trenzado, coaxial,monomodo, 2, phantom;
+2,1, Este tipo de cable puede ser afectado por interferencias externas por lo que ha de estar blindado para reducir ese riesgo, twisted pair, fibra optica, cable coaxial, infrarrojos, 3, phantom;
+3,1, En este tipo de fibra optica el pulso de la señal si sufre un ensanchamiento por lo que su capacidad de transmision es teoricamente finita y limitada, uplink, infrarrojos, monomodo, multimodo, 4, phantom;
+4,1, Sus transmisiones envuelven las mismas tecnicas empleadas en la transmision por fibra optica, excepto que el medio en este caso es el aire libre, multimodo, microondas, rayos infrarrojos, radiados, 3, phantom;
+5,1, Es la fibra optica que tiene la particularidad de propagar un pulso de la señal a transmitirse y estara conformada por un solo rayo de luz (ancho de banda infinito), downlink, monomodo, radiados, multimodo, 2, phantom;
+6,1, Son las caracteristicas mecanicas de la fibra optica, coeficiente de atenuacion y factor de propagacion, ancho y largo, diametro del nucleo y diametro del revestimiento, indice de refraccion, 3, phantom;

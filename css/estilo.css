@@ -1,0 +1,127 @@
+/* estilo de link*/
+a:active { color : gray;  text-decoration: none;}
+a:link     { color: gray;  text-decoration: none;}
+a:visited{ color:  gray;  text-decoration: none;}
+a:hover  { color: #000000;  background-color:#ffc601;}
+a.menul {color:black;}
+a:hover img { color:transparent; background:black; border-style:none;}
+
+/*estilo de las tablas*/
+td:active { color : white;  text-decoration: none;}
+td:link     { color: white;  text-decoration: none;}
+td:visited{ color:  white;  text-decoration: none;}
+td.menul { color:black;}
+td:hover img { color:transparent; background:black; border-style:none;}
+
+
+table { border: 1px solid #ccc; border-collapse:collapse; }
+
+
+div#cuerpo{   
+   position: absolute;
+   top: 0px;
+   width: 750px;
+   background: gray;
+   border-right: 2px solid white;
+   border-left: 2px solid white;
+}
+div#titulo{
+	font-size: 2em;
+	background: #ffc601;
+	color: black;
+	text-align: center;
+}
+
+div#logo{
+   position: absolute;
+   text-align: left;
+}
+
+div#menu{
+   display: block;
+}
+
+div.menuitem{
+   float: left;
+   width: 149px;
+   border-right: 1px solid white;
+   border-top: 1px solid white;
+   border-bottom: 1px solid white;
+   text-align: center;
+   margin-top: 3px;
+   margin-bottom: 3px;
+}
+
+.menuitem a:hover{
+	display:block;
+}
+
+div#nav {
+	background:	grey;
+	color: black;
+	border: 	1px solid #CCC;
+	width:		130px;
+	position: 	fixed;
+	left: 		30px;
+	top: 220px;
+   font: 		70% verdana, sans-serif;
+   text-align: left;
+   color: white;
+}        
+
+div#nav ul, div#links ul {
+	margin-left:		1em;
+	padding-left:		1em;
+	list-style:	outside url("./flecha.png");
+}	
+
+body { 
+	background: #fff;
+	margin: 15px;
+	font-family: verdana,helvetica,arial,sans-serif;
+	font-size: 12px;
+}
+
+h1,h2,h3 {
+	font-weight: bold;
+	color: #000000;
+	padding-top: 0.5em;
+	font-family: arial,sans-serif;
+}
+
+h4,h5 {
+	font-weight: normal;
+	color: #000000;
+	padding-top: 0.5em;
+	font-family: arial,sans-serif;
+}
+
+.bgblue {
+	background-color: #2053A7; 
+	color:#ffffff;
+	font-family:arial,sans-serif; 
+	font-size:14px;
+	padding:5px;
+	border: none;
+} 
+
+td.bgwhite {
+	background-color: #fff; 
+	color:#000;
+	font-family:arial,sans-serif; 
+	font-size:14px;
+}
+
+td.bgwhite10 {
+	background-color: #fff; 
+	color:#000;
+	font-family:arial,sans-serif; 
+	font-size:11px;
+}
+
+td.bggray {
+	background-color: #E8E8E8; 
+	color:#000;
+	font-family:arial,sans-serif; 
+	font-size:13px;
+}
