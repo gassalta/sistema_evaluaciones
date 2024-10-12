@@ -6,14 +6,15 @@
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type " content="text/html; charset=iso-8859-1 ">
 	<link rel="stylesheet" type="text/css" href="../css/estilo.css">
-	<script language="javascript" src="js/md5.js"></script>
+	<!-- NO SE USA MAS // 09/10/24 -->
+	<!-- <script language="javascript" src="js/md5.js"></script>
 	<script language="javascript">
 		function validar(passw) {
 			hash = calcMD5(passw);
 			document.getElementById('password').value = hash;
 			document.loginForm.submit();
 		}
-	</script>
+	</script> -->
 	</script>
 </head>
 
@@ -38,16 +39,14 @@
 									</tr>
 									<tr>
 										<td class="bgwhite">{password}</td>
-										<td><input type="password" size="15" name="passwd" /><br /></td>
+										<td><input type="password" size="15" name="password" /><br /></td>
 									</tr>
 									<tr>
 										<td class="bgwhite" align="center" colspan="2">
-											<br /><input type="submit" name="b_s" value=" Aceptar "
-												onclick="javascript: validar(passwd.value);" />
+											<br /><button type="submit" name="b_s">Aceptar</button>
 										</td>
 									</tr>
 								</table>
-								<input type="hidden" name="password" id="password" />
 							</form>
 						</td>
 					</tr>

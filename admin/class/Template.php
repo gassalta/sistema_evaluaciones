@@ -1,9 +1,4 @@
 <?php
-/* 
- * template.php : Class for manage templates
- * Author: Jonathan Hernandez  <ion@gluch.org.mx>
- * <c> 2002 JaWs
- */
 
 class block
 {
