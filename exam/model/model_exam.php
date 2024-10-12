@@ -1,4 +1,10 @@
 <?php
+
+error_reporting(-1);
+ini_set('display_errors', -1);
+error_reporting(E_ALL);
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
 require_once('../admin/config.inc.php');
 require_once('../admin/db.php');
 include_once('../admin/funciones.php');
@@ -10,7 +16,7 @@ if (!file_exists($langfile)) {
 }
 
 include($langfile);
-require('../admin/template.php');  //no tiene que ver el directorio donde se encuentre
+require('../admin/class/Template.php');  //no tiene que ver el directorio donde se encuentre
 
 class moduloexamen
 {
@@ -48,14 +54,17 @@ class moduloexamen
 
 	function login($clave)
 	{
-		$sqllogin = "SELECT idalumno, numcontrol,nombre FROM talumnos WHERE numcontrol = '{$_POST["numcontrol"]}';";
+		$Nro_control = $_POST["numcontrol"];
+		$Id_examen = $_POST["idexamen"];
+
+		$sqllogin = "SELECT idalumno, numcontrol, nombre FROM talumnos WHERE numcontrol = '{$Nro_control}' LIMIT 1;";
 		$qConsulta = mysqli_query($this->db, $sqllogin);
 		if ($qConsulta) {
 			while ($fila = mysqli_fetch_object($qConsulta)) {
 				$idalumno = $fila->idalumno;
 				mysqli_free_result($qConsulta);
 
-				$sqllogin = "SELECT idexamen FROM texamenes WHERE claveexamen = '" . $_POST["idexamen"] . "'";
+				$sqllogin = "SELECT idexamen FROM texamenes WHERE claveexamen = '{$Id_examen}' LIMIT 1;";
 				$qConsulta = mysqli_query($this->db, $sqllogin) or die("error: " . $sqllogin);
 				if ($qConsulta) {
 					while ($fila2 = mysqli_fetch_object($qConsulta)) {
@@ -73,8 +82,8 @@ class moduloexamen
 						$_SESSION['alumno'] = 'registered';
 
 						$_SESSION['sessionid'] = $_POST["sessionid"];
-						$_SESSION['numcontrol'] = $_POST["numcontrol"];
-						$_SESSION['idexamen'] = $_POST["idexamen"];
+						$_SESSION['numcontrol'] = $Nro_control;
+						$_SESSION['idexamen'] = $Id_examen;
 
 						header("Location: exam.php");
 					}

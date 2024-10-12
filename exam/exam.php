@@ -1,6 +1,11 @@
 
 <?php
 
+error_reporting(-1);
+ini_set('display_errors', -1);
+error_reporting(E_ALL);
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
 require_once('../admin/config.inc.php');
 require_once('../admin/funciones.php');
 $langfile = "../lang/" . $language . ".php";
@@ -130,7 +135,7 @@ if ($_SESSION['alumno'] = 'registered') {
 			}
 			mysqli_free_result($req);
 		}
-		//	  print $query;
+		// echo $query;
 	}
 
 	//modificado 23-04-2004 antes de insertar en tans1 es necesario comprobar que el alumno no haya sido registrado
@@ -174,6 +179,7 @@ if ($_SESSION['alumno'] = 'registered') {
 		mysqli_query($base_selection, $sql);
 	}
 
+	// Examen finalizado
 	if ($qid == $totalpreg) {
 		echo "<H1>" . ThankYou . "</H1>";
 		echo Results . "<br>";
@@ -182,35 +188,44 @@ if ($_SESSION['alumno'] = 'registered') {
 	}
 
 
+	// Examen en proceso
 	$query = "SELECT * FROM tbancopreguntas where idpregunta='$questionid'";
 	$req = mysqli_query($base_selection, $query);
 
 	$qid++;
 
+	/**
+	 * TODO: Resolver que hacer en caso de que falte una pregunta no existente
+	 */
 	echo "<form name=\"form1\" method=\"post\" action=\"" . $_SERVER['PHP_SELF'] . "\">";
-	if ($row = mysqli_fetch_object($req)) {
-		$questionid = $row->idpregunta;
-		$question = $row->pregunta;
-		$choice1 = $row->opcion1;
-		$choice2 = $row->opcion2;
-		$choice3 = $row->opcion3;
-		$choice4 = $row->opcion4;
-		$rightans = $row->respuesta;
+	if ($req->num_rows > 0) {
+		if ($row = mysqli_fetch_object($req)) {
+			$questionid = $row->idpregunta;
+			$question = $row->pregunta;
+			$choice1 = $row->opcion1;
+			$choice2 = $row->opcion2;
+			$choice3 = $row->opcion3;
+			$choice4 = $row->opcion4;
+			$rightans = $row->respuesta;
 
-		echo "<div class=\"bgblue\"><br/><span style=\"font-weight:bold;\">" . $qid . ".</span> " . nl2br($question) . "<br/><br/>\n </div>
-			  <input type=\"hidden\" name=\"qid\" value=\"$qid\">";
-		echo '<div style="padding:10px; font-size:14px;">
-				  <input type="radio" name="answer" id="1" value="1"><label for="1">' . $choice1 . '</label><br/>
-				  <input type="radio" name="answer" id="2" value="2"><label for="2">' . $choice2 . '</label><br/>
-				  <input type="radio" name="answer" id="3" value="3"><label for="3">' . $choice3 . '</label><br/>
-				  <input type="radio" name="answer" id="4" value="4"><label for="4">' . $choice4 . '</label><br/>
-			  </div>';
-		echo "<br/>";
-		echo "<input type=\"hidden\" name=\"sessionid\" value=\"$sessionid\">
-			 <input type=\"hidden\" name=\"numcontrol\" value=\"$numcontrol\">
-			 <input type=\"hidden\" name=\"idexamen\" value=\"$idexamen\">
-			 <input type=\"hidden\" name=\"rightans\" value=\"$rightans\">";
-	} //end while
+			echo "<div class=\"bgblue\"><br/><span style=\"font-weight:bold;\">" . $qid . ".</span> " . nl2br($question) . "<br/><br/>\n </div>
+				  <input type=\"hidden\" name=\"qid\" value=\"$qid\">";
+			echo '<div style="padding:10px; font-size:14px;">
+					  <input type="radio" name="answer" id="1" value="1"><label for="1">' . $choice1 . '</label><br/>
+					  <input type="radio" name="answer" id="2" value="2"><label for="2">' . $choice2 . '</label><br/>
+					  <input type="radio" name="answer" id="3" value="3"><label for="3">' . $choice3 . '</label><br/>
+					  <input type="radio" name="answer" id="4" value="4"><label for="4">' . $choice4 . '</label><br/>
+				  </div>';
+			echo "<br/>";
+		}
+	} else {
+		echo 'La pregunta no existe mas.<br>';
+	}
+	echo "<input type=\"hidden\" name=\"sessionid\" value=\"$sessionid\">
+				 <input type=\"hidden\" name=\"numcontrol\" value=\"$numcontrol\">
+				 <input type=\"hidden\" name=\"idexamen\" value=\"$idexamen\">
+				 <input type=\"hidden\" name=\"rightans\" value=\"$rightans\">";
+
 
 	echo "<input type=\"button\" name=\"Submit Answers\" value=" . txtsubmit . " onClick=\"ChecaOpc();\">
 		  <input type=\"reset\" name=\"reset\" value=" . txtreset . ">";

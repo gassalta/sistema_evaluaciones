@@ -1,7 +1,7 @@
 ﻿<?php
 
 session_start();
-if ($_SESSION['admin'] == 'registered') {
+if (isset($_SESSION['admin']) == 'registered') {
 
 	require_once('config.inc.php');
 	$langfile = "../lang/" . $language . ".php";
@@ -25,5 +25,5 @@ if ($_SESSION['admin'] == 'registered') {
 	</body>
 	</html>";
 } else {
-	header('Location: login.php');
+	include_once 'login.php';
 }
