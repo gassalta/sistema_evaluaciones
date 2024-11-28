@@ -1,11 +1,20 @@
 <?php
 session_start();
 if ($_SESSION['admin'] == 'registered') {
-	require_once ('db.php');
-	$langfile =  dirname(__DIR__)."/lang/" . $language . ".php";
+	require_once 'config.inc.php';
+
+	require_once BASE_URL_ADMIN . '/db.php';
+	$db = Database::getInstance();
+	// Archivo de idioma
+	$langfile = BASE_URL . "/lang/" . $language . ".php";
 	require_once($langfile);
-	
-	require_once 'class/Users.php';
+
+	if (!file_exists($langfile)) {
+		rep_error(FILE_NOT_FOUND);
+		exit;
+	}
+
+	require_once BASE_URL_ADMIN . '/class/Users.php';
 
 	echo " 
 	<html>
@@ -16,7 +25,7 @@ if ($_SESSION['admin'] == 'registered') {
 		<script language=\"javascript\" src=\"js/md5.js\"></script> 			
 	</head>
 	<body>";
-	include('class/menu.php');
+	include BASE_URL_ADMIN . '/class/menu.php';
 
 	if (isset($_REQUEST['action'])) {
 		$action = $_REQUEST['action'];
@@ -35,11 +44,10 @@ if ($_SESSION['admin'] == 'registered') {
 		$cargo = '';
 	}
 
-	$usuarios = new modusuarios();
+	$usuarios = new Users($db);
 	if ($action == "consultar") {
 		$usuarios->consultar("agregar", $id, $nombre, $password, $cargo);
-	} else
-	if ($action == "agregar") {
+	} else if ($action == "agregar") {
 		echo $usuarios->agregar($nombre, $password, $cargo);
 	} else if ($action == "editar") {
 		echo $usuarios->editar("guardar", $id, $nombre, $password, $cargo);

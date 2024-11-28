@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h2>{{ WelcomeAdmin }}</h2>
+    <form method="post" action="login.php?action=login">
+        <label>{{ user }} <input type="text" name="user"></label><br>
+        <label>{{ password }} <input type="password" name="password"></label><br>
+        <button type="submit">Aceptar</button>
+    </form>
+    <p>{{ message }}</p>
+{% endblock %}

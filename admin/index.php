@@ -1,11 +1,23 @@
 ﻿<?php
+error_reporting(-1);
+ini_set('display_errors', -1);
+error_reporting(E_ALL | E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
 session_start();
+
+require_once 'config.inc.php';
+
+// Archivo de idioma
+$langfile = BASE_URL . "/lang/" . $language . ".php";
+require_once($langfile);
+
+if (!file_exists($langfile)) {
+	rep_error(FILE_NOT_FOUND);
+	exit;
+}
+
 if (isset($_SESSION['admin']) == 'registered') {
 
-	require_once('config.inc.php');
-	$langfile = "../lang/" . $language . ".php";
-	require_once($langfile);
 	echo "
 <!DOCTYPE html>
 	<head>
@@ -15,7 +27,7 @@ if (isset($_SESSION['admin']) == 'registered') {
 		<link rel=\"stylesheet\" href=\"../css/estilo.css\">  
 	</head>
 	<body>";
-	include('class/menu.php');
+	include BASE_URL_ADMIN.'/class/menu.php';
 	echo "			
 		<h2>Bienvenido al m&oacute;dulo de administraci&oacute;n de SEL</h2>
 		<h1>" . AddQuestions . "</h1>
@@ -25,5 +37,5 @@ if (isset($_SESSION['admin']) == 'registered') {
 	</body>
 	</html>";
 } else {
-	include_once 'login.php';
+	include_once BASE_URL_ADMIN.'/login.php';
 }

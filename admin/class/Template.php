@@ -28,7 +28,8 @@ class template
 			$this->theme = str_replace($GLOBALS["path"], "", $theme);
 		else
 			$this->theme = $theme;
-		$this->block_regexp = '@<!--\s+BEGIN\s+(' . $this->identifier_regexp . ')\s+-->(.*)<!--\s+END\s+\1\s+-->@sm';
+		$this->block_regexp = '@<!--\s+BEGIN\s+(' . $this->identifier_regexp . ')\s+-->(.*?)<!--\s+END\s+\1\s+-->@sm';
+
 		$this->vars_regexp = '@{\s*(' . $this->identifier_regexp . ')\s*}@sm';
 		$this->isblock_regexp = '@##\s*(' . $this->identifier_regexp . ')\s*##@sm';
 	}
@@ -39,7 +40,7 @@ class template
 		if (file_exists($this->theme . $filename)) {
 			$tplfile = $this->theme . $filename;
 		} else {
-			$tplfile = $GLOBALS["path"] . "templates/" . $filename;
+			$tplfile = BASE_URL_ADMIN . "/templates/" . $filename;
 		}
 		$this->content = $this->read_file($tplfile);
 		$this->blocks = $this->get_blocks($this->content);
@@ -69,22 +70,25 @@ class template
 	function get_blocks($string)
 	{
 		$block_array = array();
-		if (preg_match_all($this->block_regexp, $string, $regs, PREG_SET_ORDER)) {
-			foreach ($regs as $key => $match) {
-				$wblock = new block;
-				$wblock->name = $match[1];
-				$wblock->content = $match[2];
-				$wblock->inner_block = $this->get_blocks($wblock->content);
-				foreach ($wblock->inner_block as $k => $iblock) {
-					$pattern = '@<!--\s+BEGIN\s+' . $iblock->name . '\s+-->(.*)<!--\s+END\s+' . $iblock->name . '\s+-->@sm';
-					$wblock->content = preg_replace($pattern, "##" . $iblock->name . "##", $wblock->content);
+		if (!empty($this->block_regexp)) {
+			if (preg_match_all($this->block_regexp, $string, $regs, PREG_SET_ORDER)) {
+				foreach ($regs as $key => $match) {
+					$wblock = new block;
+					$wblock->name = $match[1];
+					$wblock->content = $match[2];
+					$wblock->inner_block = $this->get_blocks($wblock->content);
+					foreach ($wblock->inner_block as $k => $iblock) {
+						$pattern = '@<!--\s+BEGIN\s+' . $iblock->name . '\s+-->(.*)<!--\s+END\s+' . $iblock->name . '\s+-->@sm';
+						$wblock->content = preg_replace($pattern, "##" . $iblock->name . "##", $wblock->content);
+					}
+					$wblock->vars = $this->get_variables($wblock->content);
+					$block_array[$wblock->name] = $wblock;
 				}
-				$wblock->vars = $this->get_variables($wblock->content);
-				$block_array[$wblock->name] = $wblock;
 			}
 		}
 		return $block_array;
 	}
+
 
 	function get_variables($block_content)
 	{
@@ -109,10 +113,12 @@ class template
 	function get()
 	{
 		$result = $this->main_block;
-		if (preg_match_all($this->isblock_regexp, $result, $regs, PREG_SET_ORDER)) {
-			foreach ($regs as $block_to_replace) {
-				$pattern = '@##\s*(' . $block_to_replace[1] . ')\s*##@sm';
-				$result = preg_replace($pattern, $this->blocks[$block_to_replace[1]]->parsed, $result);
+		if (!empty($this->isblock_regexp)) {
+			if (preg_match_all($this->isblock_regexp, $result, $regs, PREG_SET_ORDER)) {
+				foreach ($regs as $block_to_replace) {
+					$pattern = '@##\s*(' . $block_to_replace[1] . ')\s*##@sm';
+					$result = preg_replace($pattern, $this->blocks[$block_to_replace[1]]->parsed, $result);
+				}
 			}
 		}
 		return $result;
@@ -147,30 +153,49 @@ class template
 	function get_block_object($string)
 	{
 		if ($string == "") return $this->current_block;
+
 		$block_deep = 1;
 		foreach (explode("/", $string) as $b) {
 			if ($block_deep == 1) {
-				$block = $this->blocks[$b];
+				if (isset($this->blocks[$b])) {
+					$block = $this->blocks[$b];
+				} else {
+					trigger_error("Block '{$b}' does not exist in top-level blocks.", E_USER_WARNING);
+					return null; // Evita el acceso a algo no definido
+				}
 			} else {
-				$block = $block->inner_block[$b];
+				if (isset($block->inner_block[$b])) {
+					$block = $block->inner_block[$b];
+				} else {
+					trigger_error("Block '{$b}' does not exist in inner blocks.", E_USER_WARNING);
+					return null;
+				}
 			}
 			$block_deep++;
 		}
 		return $block;
 	}
 
+
 	function set_block($string)
 	{
-		$this->current_block = $this->get_block_object($string);
-		$this->initialize_subblock($this->current_block);
+		if (isset($this->blocks[$string])) {
+			$this->current_block = $this->blocks[$string];
+			$this->initialize_subblock($this->current_block);
+		} else {
+			trigger_error("Block '{$string}' does not exist in template", E_USER_WARNING);
+		}
 	}
+
 
 	function initialize_subblock(&$block)
 	{
-		if (preg_match_all($this->isblock_regexp, $block->content, $regs, PREG_SET_ORDER)) {
-			foreach ($regs as $subblock) {
-				$block->inner_block[$subblock[1]]->parsed = "";
-				$this->initialize_subblock($subblock);
+		if (!empty($this->block_regexp)) {
+			if (preg_match_all($this->isblock_regexp, $block->content, $regs, PREG_SET_ORDER)) {
+				foreach ($regs as $subblock) {
+					$block->inner_block[$subblock[1]]->parsed = "";
+					$this->initialize_subblock($subblock);
+				}
 			}
 		}
 	}

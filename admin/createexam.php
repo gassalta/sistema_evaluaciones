@@ -2,20 +2,31 @@
 session_start();
 if ($_SESSION['admin'] == 'registered') {
 
-	require('db.php');
-	$langfile = '../lang/' . $language . '.php';
-	include($langfile);
+	require_once 'config.inc.php';
+	require_once BASE_URL_ADMIN . '/db.php';
+	$db = Database::getInstance();
+
+	// Archivo de idioma
+	$langfile = BASE_URL . "/lang/" . $language . ".php";
+	require_once($langfile);
+
+	if (!file_exists($langfile)) {
+		rep_error(FILE_NOT_FOUND);
+		exit;
+	}
 
 	$query = "SELECT * FROM tmaterias";
 
-	$req1 = mysqli_query($base_selection, $query);
+	$req1 = $db->getPDO()->prepare($query);
+	$req1->execute();
+	$datos = $req1->fetchAll(PDO::FETCH_OBJ);
 
 	echo  "<html> 
 	<head><title>" . AppTitle . " - " . AdminModule . "</title>
 		<link rel=\"stylesheet\" href=\"../css/estilo.css\">
 	</head>";
 	echo "<body>";
-	include("class/menu.php");
+	include BASE_URL_ADMIN.'/class/menu.php';
 	echo "	
 				<h2>Evaluaciones</h2>				  
 			  <br><br>	  
@@ -23,12 +34,11 @@ if ($_SESSION['admin'] == 'registered') {
 			  \n " . Subjects . ": <select name=\"idmateria\" onchange=\"submit();\">\n
 			  <option value=\"\">" . SelSub . "</option>\n";
 
-	while ($row = mysqli_fetch_object($req1)) {
+	foreach ($datos as $row) {
 		$idmateria = $row->idmateria;
 		$nombre = $row->nombre;
 		echo "<option value=\"$idmateria\">$nombre</option>\n";
 	}
-	mysqli_free_result($req1);
 	echo "</select>";
 	echo "<input type=\"hidden\" name=\"idusuario\" value=\"" . $_SESSION['idusuario'] . "\">";
 	echo "<input type=\"submit\" name=\"Enviar\" value=\"Aceptar\">";

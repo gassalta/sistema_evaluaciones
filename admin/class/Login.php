@@ -2,31 +2,31 @@
 
 error_reporting(-1);
 ini_set('display_errors', -1);
-error_reporting(E_ALL);
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+error_reporting(E_ALL | E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
-class moduloadmin
+class Login
 {
-    private $db;
-    function __construct()
+    private $db, $twig;
+    public function __construct(Database $db, \Twig\Environment $twig)
     {
-        $this->db = mysqli_connect('localhost', 'root', '', 'seldb');
+        $this->db = $db;
+        $this->twig = $twig;
     }
+
     public function login_form($message = "")
     {
-        $tpl = new template("templates/");
-        $tpl->load("login.html");
-        $tpl->set_block("form");
-        $tpl->set_variable("AppTitle", traducir_cadena("AppTitle"));
-        $tpl->set_variable("AdminModule", traducir_cadena("AdminModule"));
-        $tpl->set_variable("Institute", traducir_cadena("Institute"));
-        $tpl->set_variable("WelcomeAdmin", traducir_cadena("WelcomeAdmin"));
-        $tpl->set_variable("message", traducir_cadena($message));
-        $tpl->set_variable("user", traducir_cadena("user"));
-        $tpl->set_variable("password", traducir_cadena("password"));
-        $tpl->parse_block("form");
-        return $tpl->get();
+        // Renderiza la plantilla Twig y pasa las variables
+        return $this->twig->render('login.html.twig', [
+            'AppTitle' => traducir_cadena("AppTitle"),
+            'AdminModule' => traducir_cadena("AdminModule"),
+            'Institute' => traducir_cadena("Institute"),
+            'WelcomeAdmin' => traducir_cadena("WelcomeAdmin"),
+            'message' => traducir_cadena($message),
+            'user' => traducir_cadena("user"),
+            'password' => traducir_cadena("password"),
+        ]);
     }
+
 
     public function login()
     {
@@ -38,9 +38,10 @@ class moduloadmin
 						 WHERE nombre = '{$usuario}' 
                          AND passwd = '{$clave}'
                          LIMIT 1; ";
-            $consulta = mysqli_query($this->db, $sqllogin);
+            $consulta = $this->db->getPDO()->prepare($sqllogin);
+            $consulta->execute();
 
-            if ($fila = mysqli_fetch_object($consulta)) {
+            if ($fila = $consulta->fetch()) {
                 $session_id = rand();
                 session_start();
                 $_SESSION['logged'] = $session_id;

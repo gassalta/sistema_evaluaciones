@@ -1,12 +1,15 @@
 <?php
 session_start();
 if ($_SESSION['admin'] == 'registered') {
+	require_once 'config.inc.php';
 
-	require_once('db.php');
-	$langfile =  dirname(__DIR__) . "/lang/" . $language . ".php";
+	require_once BASE_URL_ADMIN . '/db.php';
+	$db = Database::getInstance();
+	// Archivo de idioma
+	$langfile = BASE_URL . "/lang/" . $language . ".php";
 	require_once($langfile);
 
-	require_once 'class/Students.php';
+	require_once BASE_URL_ADMIN . '/class/Students.php';
 
 	echo " 
 	<html>
@@ -17,7 +20,7 @@ if ($_SESSION['admin'] == 'registered') {
 	</head>
 	<body>";
 
-	include('class/menu.php');
+	include BASE_URL_ADMIN . '/class/menu.php';
 
 	if (isset($_REQUEST['action'])) {
 		$action = $_REQUEST['action'];
@@ -40,12 +43,11 @@ if ($_SESSION['admin'] == 'registered') {
 		$txtnumctrl = "";
 	}
 
-	$alumnos = new modalumnos();
+	$alumnos = new Alumnos($db);
 
 	if ($action == "consultar") {
 		$alumnos->consultar("agregar", $idalumno, $txtnombre, $txtnumctrl);
-	} else
-	if ($action == "agregar") {
+	} else if ($action == "agregar") {
 		print $alumnos->agregar($txtnombre, $txtnumctrl);
 	} else if ($action == "editar") {
 		print $alumnos->editar("guardar", $idalumno, $txtnombre, $txtnumctrl);
