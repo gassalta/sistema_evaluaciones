@@ -13,6 +13,15 @@ require_once BASE_URL_ADMIN . '/class/Template.php';
 
 $db = Database::getInstance();
 
+// Archivo de idioma
+$langfile = BASE_URL . "/lang/" . $language . ".php";
+require_once($langfile);
+
+if (!file_exists($langfile)) {
+	rep_error(FILE_NOT_FOUND);
+	exit;
+}
+
 require_once BASE_URL . '/vendor/autoload.php';
 
 // Configuración de Twig
@@ -33,4 +42,5 @@ if (isset($_REQUEST["action"])) {
 	}
 } else {
 	echo $LoginAdmin->login_form(traducir_cadena(LOGIN_DATA));
+	echo '<a href="'.URL_BASE.'">Volver al Inicio</a>';
 }
