@@ -2,12 +2,15 @@
 
 session_start();
 if ($_SESSION['admin'] == 'registered') {
+	require_once 'config.inc.php';
 
-	require_once('db.php');
-	$langfile =  dirname(__DIR__) . "/lang/" . $language . ".php";
+	require_once BASE_URL_ADMIN . '/db.php';
+	$db = Database::getInstance();
+	// Archivo de idioma
+	$langfile = BASE_URL . "/lang/" . $language . ".php";
 	require_once($langfile);
 
-	require_once 'class/Materias.php';
+	require_once BASE_URL_ADMIN . '/class/Materias.php';
 
 	echo " 
 	<html>
@@ -17,7 +20,7 @@ if ($_SESSION['admin'] == 'registered') {
 		<link href=\"../css/estilo.css\" rel=\"stylesheet\" content=\"text/css\">
 	</head>
 	<body>";
-	include('class/menu.php');
+	include BASE_URL_ADMIN . '/class/menu.php';
 
 	if (isset($_REQUEST['action'])) {
 		$action = $_REQUEST['action'];
@@ -33,7 +36,7 @@ if ($_SESSION['admin'] == 'registered') {
 		$unidades = '';
 	}
 
-	$materias = new modmaterias();
+	$materias = new Materias($db);
 
 	if ($action == "consultar") {
 		$materias->consultar("agregar", $idmateria, $nombre, $unidades);

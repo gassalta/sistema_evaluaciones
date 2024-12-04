@@ -1,9 +1,0 @@
-AuthUserFile /var/www/html/sel/.htpasswd
-AuthGroupFile /dev/null
-AuthName "Acceso Restringido"
-AuthType Basic
-
-<Limit GET POST>
-
-</Limit>
-

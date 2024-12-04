@@ -7,7 +7,9 @@
 <body>
   <?php
 
-  include('db.php');
+  require_once 'config.inc.php';
+  require_once BASE_URL_ADMIN . '/db.php';
+  $db = Database::getInstance();
 
   if (isset($_REQUEST['idmateria']))
     $idmateria = $_REQUEST['idmateria'];
@@ -27,14 +29,13 @@
   echo "<table width=\"90%\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n";
   echo "<tr><td>Clave de examen</td><td>Fecha</td><td>Materia</td><td>Acciones</td></tr>";
 
-  if ($req = mysqli_query($base_selection, $query)) {
-    while ($row = mysqli_fetch_object($req)) {
+  if ($req = $db->getPDO()->prepare($query)) {
+    while ($row = $req->fetch(PDO::FETCH_OBJ)) {
       echo "<tr><td class=\"bgwhite10\" width=\"30%\"><b> " . $row->claveexamen . " </b></td>
 					  <td class=\"bgwhite10\" width=\"20%\">" . $row->fecha . "</td>
 					  <td class=\"bgwhite10\" width=\"30%\">" . $row->materia . "</td>
 						<td align=\"center\"><input type=\"button\" onclick=\"location='questionpapers_form.php?id=$row->idexamen&action=edit';\" value=\"Editar\"></td></tr>";
     }
-    mysqli_free_result($req);
   }
 
   echo "</table>\n";
@@ -47,25 +48,26 @@
   $idexamen = "";
   $claveexamen = "";
   $fecha = "";
-  if (isset($_REQUEST['action']))
+  if (isset($_REQUEST['action'])) {
     if ($_REQUEST['action'] == 'edit') {
       $query =  "SELECT * FROM texamenes WHERE idexamen = " . $_REQUEST['id'];
-      if ($req = mysqli_query($base_selection, $query)) {
-        if ($row = mysqli_fetch_object($req)) {
+      if ($req = $db->getPDO()->prepare($query)) {
+        if ($row = $req->fetch(PDO::FETCH_OBJ)) {
           $idexamen = $row->idexamen;
           $claveexamen = $row->claveexamen;
           $fecha = $row->fecha;
 
-          $query =  "SELECT q0,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16,q17,q18,q19 FROM texamenes WHERE idexamen = " . $idexamen;
-          $req = mysqli_query($base_selection, $query);
-          if ($row = mysqli_fetch_row($req)) {
-            for ($i = 0; $i < mysqli_num_fields($req); $i++)
+          $query1 =  "SELECT q0,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16,q17,q18,q19 FROM texamenes WHERE idexamen = " . $idexamen;
+          $req1 = $db->getPDO()->prepare($query1);
+          if ($row = $req->fetch(PDO::FETCH_NUM)) {
+            for ($i = 0; $i < $req->columnCount(); $i++)
               $q[$i] = $row[$i];
           }
         }
-        mysqli_free_result($req);
       }
     }
+  }
+
 
 
 

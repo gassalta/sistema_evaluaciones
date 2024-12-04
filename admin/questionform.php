@@ -1,12 +1,18 @@
 <?php
 session_start();
 if ($_SESSION['admin'] == 'registered') {
-	include('db.php');
+	require_once 'config.inc.php';
+	require_once BASE_URL_ADMIN . '/db.php';
+	$db = Database::getInstance();
 
-	require_once('config.inc.php');
-	$langfile = "../lang/" . $language . ".php";
+	// Archivo de idioma
+	$langfile = BASE_URL . "/lang/" . $language . ".php";
 	require_once($langfile);
 
+	if (!file_exists($langfile)) {
+		rep_error(FILE_NOT_FOUND);
+		exit;
+	}
 
 	$questionid = "";
 	$subjectidedit = "";
@@ -25,9 +31,10 @@ if ($_SESSION['admin'] == 'registered') {
 
 	if ($action == 'edit') {
 		$query =  "SELECT * FROM tbancopreguntas WHERE idpregunta='" . $_REQUEST['id'] . "' ORDER BY idpregunta ASC";
-		$req = mysqli_query($base_selection, $query);
+		$req1 = $db->getPDO()->prepare($query);
+		$req1->execute();
 
-		if ($row = mysqli_fetch_object($req)) {
+		while ($row = $req1->fetch(PDO::FETCH_OBJ)) {
 			$questionid = $row->idpregunta;
 			$subjectidedit = $row->idmateria;
 			$question = $row->pregunta;
@@ -38,8 +45,7 @@ if ($_SESSION['admin'] == 'registered') {
 			$answer = $row->respuesta;
 			$unit = $row->unidad;
 		}
-	} else
-	if (isset($_REQUEST['idmateria'])) {
+	} elseif (isset($_REQUEST['idmateria'])) {
 		$subjectidedit = $_REQUEST['idmateria'];
 		if (isset($_REQUEST['idunidad']))
 			$unit = $_REQUEST['idunidad'];
@@ -56,7 +62,7 @@ if ($_SESSION['admin'] == 'registered') {
 	</head>
 
 	<body>
-		<?php include('class/menu.php'); ?>
+		<?php include BASE_URL_ADMIN . '/class/menu.php'; ?>
 		<h2>Agregar una pregunta por formulario</h2>
 		<h3>Banco de preguntas</h3>
 
@@ -71,18 +77,19 @@ if ($_SESSION['admin'] == 'registered') {
 					<td>
 						<?php
 						$query = "SELECT * FROM tmaterias";
-						$req1 = mysqli_query($base_selection, $query);
+						$req1 = $db->getPDO()->prepare($query);
+						$req1->execute();
+						$datos = $req1->fetchAll(PDO::FETCH_OBJ);
 						echo
 						"<select name=\"idmateria\" id=\"select1\" onchange='cargaContenido(this.id)'>\n";
 						echo "<option value=\"\">" . SelSub . "</option>\n";
-						while ($row = mysqli_fetch_object($req1)) {
+						foreach ($datos as $row) {
 							$subjectid = $row->idmateria;
 							$subject = $row->nombre;
 							echo "<option value=\"$subjectid\"";
 							if ((($action == 'edit') || ($action == 'insert')) && ($subjectidedit == $subjectid)) echo "selected";
 							echo ">$subject</option>\n";
-						}
-						mysqli_free_result($req1);
+						};
 						echo "</select>";
 						?> </td>
 				</tr>
@@ -92,10 +99,12 @@ if ($_SESSION['admin'] == 'registered') {
 						<?php
 						if (($action == 'edit') || (isset($subjectidedit))) {
 							$sql = "SELECT unidades FROM tmaterias WHERE idmateria = '$subjectidedit'";
-							$req = mysqli_query($base_selection, $sql) or die(mysqli_error() . $sql);
+							$req = $db->getPDO()->prepare($sql);
+							$req->execute();
+
 							echo "<select name='unidad' id='select2'>";
 							$i = 1;
-							$registro = mysqli_fetch_row($req);
+							$registro = $req->fetch(PDO::FETCH_NUM);
 							$total = $registro[0];
 							while ($total >= $i) {
 								echo "<option value=\"$i\"";

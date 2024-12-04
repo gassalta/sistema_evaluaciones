@@ -2,7 +2,7 @@
 
 <head>
 	<!--  BEGIN form -->
-	<title>{AppTitle} {ExamModule}</title>
+	<title>{{AppTitle}} {{ExamModule}}</title>
 	<meta charset="utf-8">
 	<link href="../css/estilo.css" rel="stylesheet" content="text/css">
 	<script type="text/javascript">
@@ -23,55 +23,53 @@
 </head>
 
 <body onload="document.getElementById('idexamen').focus();">
-	<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+
 	<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" style="border: none;">
 		<tr height="160" valign="top">
 			<td class="bgwhite" align="center">
-				<h1>{Institute}</h1>
-				<h2>{WelcomeExam}</h2>
-				<h3>{Instructions}</h3>
+				<h1>{{Institute}}</h1>
+				<h2>{{WelcomeExam}}</h2>
+				<h3>{{Instructions}}</h3>
 			</td>
 		</tr>
 		<tr valign="top">
 			<td class="bgwhite" align="center">
-
-				<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
 				<table cellpadding="5" cellspacing="0" border="0"
 					style="width:360px; height:250px; border: 3px solid #174a89;">
 					<tr>
 						<td class="bgwhite" style="padding: 10px;">
 							<form name="examform" method="post" action="index.php?action=login">
-								<input type="hidden" name="sessionid" value={randval}>
-								<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+								<input type="hidden" name="sessionid" value={{randval}}>
+
 								<table cellspacing="0" width="100%" border="0" align="center" style="border: none;">
 									<tr>
-										<td class="bgwhite">{txtquestionpaperid}</td>
-										<td><input type="text" name="idexamen" id="idexamen" value="{txtidexamen}" />
+										<td class="bgwhite">{{txtquestionpaperid}}</td>
+										<td><input type="text" name="idexamen" id="idexamen" value="{{txtidexamen}}" />
 											<input type="hidden" name="qid" value="0" />
 										</td>
 									</tr>
 									<tr>
-										<td class="bgwhite">{txtstudentid}</td>
+										<td class="bgwhite">{{txtstudentid}}</td>
 										<td><input type="text" name="numcontrol" id="numcontrol" /></td>
 									</tr>
 									<tr>
 										<td class="bgwhite" align="center" colspan="2"><br />
-											<input type="submit" name="Submit" value="{txtsubmit}" />
-											<input type="reset" name="Submit2" value="{txtreset}" />
+											<input type="submit" name="Submit" value="{{txtsubmit}}" />
+											<input type="reset" name="Submit2" value="{{txtreset}}" />
 										</td>
 									</tr>
 							</form>
 				</table>
-				<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+
 		<tr height="40">
 			<td class="bgwhite" valign="middle" align="center">
-				<font color="#ff0000">{message}</font>
+				<font color="#ff0000">{{message}}</font>
 			</td>
 		</tr>
 		</td>
 		</tr>
 	</table>
-	<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
+
 	</td>
 	</tr>
 	<tr align="center">
@@ -79,8 +77,6 @@
 		<td>
 	</tr>
 	</table>
-	<!-- // -------------------------------------------------------------------------------------------------------------------------------------------------------------- // -->
-	<!-- END form -->
 </body>
 
 </html>

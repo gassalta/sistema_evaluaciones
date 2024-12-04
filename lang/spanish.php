@@ -3,9 +3,9 @@
 //Nombre de la Aplicacion y Modulos
 define ("Institute","Instituto Tecnológico");
 define ("AppTitle", "Sistema de Evaluaciones en L&iacute;nea");
-define ("AdminModule","M&oacute;dulo de Administraci&oacute;n");
-define ("ExamModule","M&oacute;dulo de Examen");
-define ("StudentsModule","M&oacute;dulo de Alumnos");
+define ("AdminModule","Módulo de Administración");
+define ("ExamModule","Módulo de Examen");
+define ("StudentsModule","Módulo de Alumnos");
 
 //Etiquetas
 define ("Home","Inicio");
@@ -21,10 +21,10 @@ define ("Method2Desc","Agregar un conjunto de preguntas a trav&eacute;s de un ar
 define ("MakeQPDesc","1.- Seleccione una materia de la lista desplegable y presione el boton Aceptar<br>
 2.- El marco de la izquierda contiene las preguntas disponibles de la materia seleccionada (se muestran los campos de clave de pregunta, pregunta, opciones de respuesta y respuesta correcta)<br>
 Seleccione el id de la pregunta (mostrado en negrita) que desea agregar al examen creado y escribala en el marco de la derecha en el n&uacute;mero de pregunta que ud. prefiera.<br>
-3.- Finalmente complete los dem&aacute;s campos (nombre de evaluador, fecha y clave/n&uacute;mero de la evaluaci&oacute;n), este &uacute;ltimo se usar&aacute; para asignar evaluaciones a los estudiantes.<br>");
+3.- Finalmente complete los dem&aacute;s campos (nombre de evaluador, fecha y clave/n&uacute;mero de la evaluación), este &uacute;ltimo se usar&aacute; para asignar evaluaciones a los estudiantes.<br>");
 
 define("user","usuario");
-define("password","contrase&ntilde;a");
+define("password","contraseña");
 
 define ("txtsessionid","id sesion: ");
 define ("txtstudentid","numero de control: ");
@@ -33,13 +33,13 @@ define ("txtquestionpaperid","clave de examen: ");
 //mensajes de error/ayuda/advertencia
 define ("FirstForm","Por favor, completa el formulario con todos los datos que se piden");
 define ("ThankYou","gracias por contestar la evaluacion");
-define ("WelcomeExam", "Bienvenido al m&oacute;dulo de Examen");
-define ("WelcomeAdmin", "Bienvenido al m&oacute;dulo de Administraci&oacute;n");
+define ("WelcomeExam", "Bienvenido al módulo de Examen");
+define ("WelcomeAdmin", "Bienvenido al módulo de Administración");
 define ("Instructions","por favor completa la siguiente forma para iniciar tu examen");
 define ("SelSub","selecccione una Materia...");
 define ("Subjects","Materias");
 define ("NotRegistered", "Aun no est&aacute;s registrado, por favor contacta con tu profesor");
-define ("QPNotRegistered","Verifica tu clave de evaluaci&oacute;n y vuelve a intentarlo");
+define ("QPNotRegistered","Verifica tu clave de evaluación y vuelve a intentarlo");
 define ("FILE_NOT_FOUND","El archivo de idioma no existe");
 define ("Results","Tus resultados estan siendo procesados...");
 define ("Logout","Pulsa aqui para terminar el proceso");

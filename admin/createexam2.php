@@ -1,14 +1,19 @@
 <?php
-include('db.php');
-require('funciones.php');
-$langfile = '../lang/' . $language . '.php';
+require_once 'config.inc.php';
+require_once BASE_URL_ADMIN . '/db.php';
+$db = Database::getInstance();
+
+require_once BASE_URL_ADMIN . '/funciones.php';
+
+// Archivo de idioma
+$langfile = BASE_URL . "/lang/" . $language . ".php";
+require_once($langfile);
 
 if (!file_exists($langfile)) {
-  rep_error(FileNotFound);
+  rep_error(FILE_NOT_FOUND);
   exit;
 }
 
-include($langfile);
 
 echo "
 <html>

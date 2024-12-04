@@ -11,7 +11,10 @@ Este sistema permite crear evaluaciones y exámenes de opción múltiple a parti
 
 | Version | PHP  |
 |---------|------|
-| `2.0`   | ^7.3 |
+| `2.0`   | `^7.4 OR ^8.2` |
+
+### Author
+@gassalta
 
 ### Referencias
 - Andres Velasco Gordillo <phantomimo@gmail.com>

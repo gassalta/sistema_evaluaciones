@@ -1,14 +1,19 @@
 <?php
 
-include('db.php');
-require('funciones.php');
-$langfile = '../lang/' . $language . '.php';
+require_once 'config.inc.php';
+require_once BASE_URL_ADMIN . '/db.php';
+$db = Database::getInstance();
+
+require_once BASE_URL_ADMIN . '/funciones.php';
+
+// Archivo de idioma
+$langfile = BASE_URL . "/lang/" . $language . ".php";
+require_once($langfile);
 
 if (!file_exists($langfile)) {
-	rep_error(LangFile);
+	rep_error(FILE_NOT_FOUND);
 	exit;
 }
-include($langfile);
 
 if (isset($_REQUEST['idmateria']))
 	$idmateria = $_REQUEST['idmateria'];
@@ -28,9 +33,11 @@ echo "
 	<div style=\"text-align:right; padding-right:60px;\"><input type=\"button\"	onclick=\"top.frames.location='questionform.php?idmateria=$idmateria'\" value=\"Agregar pregunta\"/> </div>";
 
 $query =  "SELECT * FROM tbancopreguntas WHERE idmateria='" . $idmateria . "' ORDER BY idpregunta ASC";
-$req = mysqli_query($base_selection, $query);
+$req1 = $db->getPDO()->prepare($query);
+$req1->execute();
+$datos = $req1->fetchAll(PDO::FETCH_OBJ);
 
-while ($row = mysqli_fetch_object($req)) {
+foreach ($datos as $row) {
 	$questionid = $row->idpregunta;
 	$subjectid = $row->idmateria;
 	$question = $row->pregunta;
@@ -55,7 +62,6 @@ while ($row = mysqli_fetch_object($req)) {
 			</td></tr>";
 	echo "</table>\n";
 	echo "<br>\n";
-}
-mysqli_free_result($req);
+};
 echo "</body>
 	  </html>";

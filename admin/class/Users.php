@@ -1,17 +1,16 @@
 <?php
-class modusuarios
+class Users
 {
     private $bd;
-    function __construct()
+    public function __construct(Database $db)
     {
-        include('db.php');
-        $this->bd = $mysqli;
+        $this->bd = $db;
     }
 
     function consultar($action = "agregar", $id = "")
     {
         $query = "SELECT * FROM tusuarios";
-        $req = $this->bd->query($query);
+        $req = $this->bd->getPDO()->prepare($query);
 
         echo "<table border=1>
 				<caption> Usuarios </caption>
@@ -20,7 +19,7 @@ class modusuarios
 					  <td class=\"bgblue\">Cargo</td>  
 					  <td class=\"bgblue\" align=\"center\" colspan=\"2\">Acciones</td>    
 				</tr>";
-        while ($row = $req->fetch_object()) {
+        while ($row = $req->fetch(PDO::FETCH_OBJ)) {
             echo "<tr>
 							<td>" . $row->nombre . "</td>
 							<td>" . $row->cargo . "</td>
@@ -32,9 +31,10 @@ class modusuarios
 
         if (!empty($id)) {
             $query = "SELECT * FROM tusuarios WHERE idusuario = '{$id}';";
-            $req = $this->bd->query($query);
-            if ($req->num_rows != 0) {
-                while ($row = $req->fetch_object()) {
+            $req = $this->bd->getPDO()->prepare($query);
+
+            if ($req->rowCount() != 0) {
+                while ($row = $req->fetch(PDO::FETCH_OBJ)) {
                     echo "
                             <form name=\"frmagregar\" method=\"post\" action=\"users.php?action=$action\">
                             <input type=\"hidden\" name=\"id\" value=\"" . $id . "\">						
@@ -72,7 +72,7 @@ class modusuarios
     function agregar()
     {
         $sql = "INSERT INTO tusuarios(nombre,passwd,cargo) VALUES('{$_POST['nombre']}', md5('{$_POST['password']}'),'{$_POST['cargo']}')";
-        if ($consulta = mysqli_query($this->bd, $sql)) {
+        if ($this->bd->getPDO()->prepare($sql)) {
             return $this->consultar();
         } else {
             echo "error al ejecutar el script SQL";
@@ -96,7 +96,7 @@ class modusuarios
                     passwd = '{$clave}',
                     cargo='{$cargo}' 
 						WHERE idusuario = '{$id}'; ";
-        if (mysqli_query($this->bd, $sql)) {
+        if ($this->bd->getPDO()->prepare($sql)) {
             return $this->consultar("agregar", "", "", "");
         } else {
             echo "error al ejecutar el script SQL";
@@ -106,7 +106,7 @@ class modusuarios
     function borrar()
     {
         $sql = "DELETE FROM tusuarios WHERE idusuario=" . $_REQUEST['id'];
-        mysqli_query($this->bd, $sql);
+        $this->bd->getPDO()->prepare($sql);
         return $this->consultar();
     }
 }
