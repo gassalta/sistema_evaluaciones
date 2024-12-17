@@ -6,30 +6,31 @@
 
 <body>
   <?php
-
   require_once 'config.inc.php';
   require_once BASE_URL_ADMIN . '/db.php';
   $db = Database::getInstance();
 
-  if (isset($_REQUEST['idmateria']))
+  if (isset($_REQUEST['idmateria'])) {
     $idmateria = $_REQUEST['idmateria'];
-  else
+  } else {
     $idmateria = 1;
+  }
 
-  if (isset($_REQUEST['action']))
+  if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];
-  else
+  } else {
     $action = 'insert';
+  }
 
 
   echo "<h3>Evaluaciones creadas</h3>";
 
   $query =  "SELECT e.*, m.nombre AS materia FROM texamenes e LEFT JOIN tmaterias m ON e.idmateria = m.idmateria WHERE e.idmateria = " . $idmateria . " ORDER BY e.idexamen ASC";
+  $req = $db->getPDO()->prepare($query);
 
   echo "<table width=\"90%\" border=\"1\" cellspacing=\"0\" cellpadding=\"0\">\n";
   echo "<tr><td>Clave de examen</td><td>Fecha</td><td>Materia</td><td>Acciones</td></tr>";
-
-  if ($req = $db->getPDO()->prepare($query)) {
+  if ($req->execute()) {
     while ($row = $req->fetch(PDO::FETCH_OBJ)) {
       echo "<tr><td class=\"bgwhite10\" width=\"30%\"><b> " . $row->claveexamen . " </b></td>
 					  <td class=\"bgwhite10\" width=\"20%\">" . $row->fecha . "</td>
@@ -45,13 +46,20 @@
   for ($i = 0; $i <= 20; $i++) {
     $q[$i] = "";
   }
+
   $idexamen = "";
   $claveexamen = "";
   $fecha = "";
+
+  // 2024-12-17: Se comentan los errores temporalmente
+  error_reporting(0);
+  ini_set('display_errors', 0);
+
   if (isset($_REQUEST['action'])) {
     if ($_REQUEST['action'] == 'edit') {
       $query =  "SELECT * FROM texamenes WHERE idexamen = " . $_REQUEST['id'];
       if ($req = $db->getPDO()->prepare($query)) {
+        $req->execute();
         if ($row = $req->fetch(PDO::FETCH_OBJ)) {
           $idexamen = $row->idexamen;
           $claveexamen = $row->claveexamen;
@@ -59,7 +67,8 @@
 
           $query1 =  "SELECT q0,q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11,q12,q13,q14,q15,q16,q17,q18,q19 FROM texamenes WHERE idexamen = " . $idexamen;
           $req1 = $db->getPDO()->prepare($query1);
-          if ($row = $req->fetch(PDO::FETCH_NUM)) {
+          $req1->execute();
+          if ($row = $req1->fetch(PDO::FETCH_NUM)) {
             for ($i = 0; $i < $req->columnCount(); $i++)
               $q[$i] = $row[$i];
           }
@@ -67,10 +76,6 @@
       }
     }
   }
-
-
-
-
   ?>
 
   <form name="formz" method="post" action="questionpapers_<?php echo $action ?>.php">

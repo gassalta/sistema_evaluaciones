@@ -48,9 +48,9 @@ if ($_SESSION['admin'] == 'registered') {
 	if ($action == "consultar") {
 		$usuarios->consultar("agregar", $id, $nombre, $password, $cargo);
 	} else if ($action == "agregar") {
-		echo $usuarios->agregar($nombre, $password, $cargo);
+		echo $usuarios->agregar();
 	} else if ($action == "editar") {
-		echo $usuarios->editar("guardar", $id, $nombre, $password, $cargo);
+		echo $usuarios->editar("guardar", $id);
 	} else if ($action == "guardar") {
 		echo $usuarios->guardar();
 	} else if ($action == "borrar") {

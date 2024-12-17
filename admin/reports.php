@@ -26,40 +26,41 @@ if ($_SESSION['admin'] == 'registered') {
 
 	<body>
 
-	<?php
-	include BASE_URL_ADMIN . '/class/menu.php';
+		<?php
+		include BASE_URL_ADMIN . '/class/menu.php';
 
-	if (isset($_REQUEST['enviar']) && ($_REQUEST['idexamen'] <> '')) {
-		if (isset($_REQUEST['opc']))
-			$opc = $_REQUEST['opc'];
-		else
-			$opc = 1;
+		if (isset($_REQUEST['enviar']) && ($_REQUEST['idexamen'] <> '')) {
+			if (isset($_REQUEST['opc']))
+				$opc = $_REQUEST['opc'];
+			else
+				$opc = 1;
 
-		switch ($opc) {
-			case 1:
-				$campo = 'talumnos.numcontrol ASC';
-				break;
-			case 2:
-				$campo = 'tans1.aciertos DESC';
-				break;
-			default:
-				$campo = 'talumnos.numcontrol ASC';
-		}
+			switch ($opc) {
+				case 1:
+					$campo = 'talumnos.numcontrol ASC';
+					break;
+				case 2:
+					$campo = 'tans1.aciertos DESC';
+					break;
+				default:
+					$campo = 'talumnos.numcontrol ASC';
+			}
 
-		if (isset($_REQUEST['idexamen']))
-			$nombre_examen = $_REQUEST['idexamen'];
-		else
-			$nombre_examen = '1';
+			if (isset($_REQUEST['idexamen']))
+				$nombre_examen = $_REQUEST['idexamen'];
+			else
+				$nombre_examen = '1';
 
-		$query = "SELECT talumnos.idalumno, talumnos.numcontrol, talumnos.nombre, tans1.idtest, tans1.aciertos, (tans1.aciertos*100)/texamenes.totalpreg as calificacion 
+			$query = "SELECT talumnos.idalumno, talumnos.numcontrol, talumnos.nombre, tans1.idtest, tans1.aciertos, (tans1.aciertos*100)/texamenes.totalpreg as calificacion 
 					FROM talumnos LEFT JOIN tans1 ON talumnos.idalumno = tans1.idalumno
 					LEFT JOIN texamenes ON tans1.idexamen = texamenes.idexamen
 					WHERE texamenes.claveexamen = '" . $_REQUEST['idexamen'] . "' ORDER BY " . $campo;
 
-		$req = $db->getPDO()->prepare($query);
+			$req = $db->getPDO()->prepare($query);
+			$req->execute();
 
-		if ($req->rowCount() > 0) {
-			echo "
+			if ($req->rowCount() > 0) {
+				echo "
 		<br>Reporte de calificaciones para el examen <strong>" . $nombre_examen . "</strong>
 		<hr/><br/>	
 		<table align=\"center\">	
@@ -70,43 +71,49 @@ if ($_SESSION['admin'] == 'registered') {
 				<td class=\"bgblue\">Calificaci&oacute;n</td>
 				<td class=\"bgblue\">Detalles</td>			
 		</tr>";
-			while ($row = $req->fetch(PDO::FETCH_OBJ)) {
-				echo "<tr>	<td align=\"center\">" . $row->numcontrol . "</td>
+				while ($row = $req->fetch(PDO::FETCH_OBJ)) {
+					echo "<tr>	<td align=\"center\">" . $row->numcontrol . "</td>
 								<td >" . $row->nombre . "</td>						
 								<td align=\"right\">" . $row->aciertos . "</td>
 								<td align=\"right\">" . $row->calificacion . "</td>
 								<td align=\"center\"><input type=\"button\" onclick=\"popup(" . $row->idtest . "," . $row->idalumno . ");\" value=\"Ver\"></td>										
 						 </tr>";
-			}
-			$datetime = date("Y-m-d H:i");
-			echo "</table> ";
-			echo "<br/>Total: " . $req->rowCount();
-			echo "<br/>
+				}
+				$datetime = date("Y-m-d H:i");
+				echo "</table> ";
+				echo "<br/>Total: " . $req->rowCount();
+				echo "<br/>
 					<hr>Fecha: <em> " . $datetime . "</em>";
-		} else {
-			echo "
+			} else {
+				echo "
 			<br>No se encontr&oacute; la clave del examen <strong>" . $nombre_examen . "</strong>
 			<hr/><br/>";
-		}
-	} else {
-		echo "
-	<form name=\"formrep\" method=\"post\" action=\"reports.php\">
-		<table>
-			<tr><td class=\"bgwhite\">Clave de Examen:</td>
-				  <td><input type=\"text\" name=\"idexamen\"> </td>
-			</tr>		
-		<tr><td class=\"bgwhite\">Ordenar por: </td>
-			  <td>
-					<input type=\"radio\" name=\"opc\" value=\"2\" checked=\"true\">Calificacion<br/>
-					<input type=\"radio\" name=\"opc\" value=\"1\" >No. de control <br/>
-					</td>
-		</td>
-		<tr><td colspan=\"2\" align=\"center\"><input type=\"submit\" name=\"enviar\" value=\"Generar\"></td></tr>
-	</form><hr/>";
-	}
-	echo "</body>
+			}
+		} else {
+		?>
+			<form name="formrep" method="post" action="reports.php">
+
+				<fieldset>
+					<!-- <legend>Select a maintenance drone:</legend> -->
+					<div><label for="clave">Clave del Examen</label>
+						<input type="text" id="clave" name="idexamen">
+					</div>
+					<div><label for="">Ordenar por:</label>
+						<div>
+							<label><input type="radio" name="opc" value="2" checked>Calificacion</label>
+							<label><input type="radio" name="opc" value="1">No. de control</label>
+						</div>
+					</div>
+					<hr>
+					<input type="submit" name="enviar" value="Generar">
+				</fieldset>
+
+				
+			</form>
+	<?php }
+		echo "</body>
 	</html>";
-} else {
-	header('Location: login.php');
-}
+	} else {
+		header('Location: login.php');
+	}
 	?>

@@ -1,4 +1,10 @@
 <?php
+
+error_reporting(-1);
+ini_set('display_errors', -1);
+error_reporting(E_ALL | E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
+
 class Users
 {
     private $bd;
@@ -11,6 +17,7 @@ class Users
     {
         $query = "SELECT * FROM tusuarios";
         $req = $this->bd->getPDO()->prepare($query);
+        $req->execute();
 
         echo "<table border=1>
 				<caption> Usuarios </caption>
@@ -32,6 +39,7 @@ class Users
         if (!empty($id)) {
             $query = "SELECT * FROM tusuarios WHERE idusuario = '{$id}';";
             $req = $this->bd->getPDO()->prepare($query);
+            $req->execute();
 
             if ($req->rowCount() != 0) {
                 while ($row = $req->fetch(PDO::FETCH_OBJ)) {
@@ -71,15 +79,19 @@ class Users
 
     function agregar()
     {
-        $sql = "INSERT INTO tusuarios(nombre,passwd,cargo) VALUES('{$_POST['nombre']}', md5('{$_POST['password']}'),'{$_POST['cargo']}')";
-        if ($this->bd->getPDO()->prepare($sql)) {
+        $nombre = $_POST['nombre'];
+        $pass = $_POST['password'];
+        $cargo = $_POST['cargo'];
+
+        $sql = "INSERT INTO tusuarios(nombre,passwd,cargo) VALUES('{$nombre}', md5('{$pass}'),'{$cargo}')";
+        if ($this->bd->getPDO()->prepare($sql)->execute()) {
             return $this->consultar();
         } else {
             echo "error al ejecutar el script SQL";
         }
     }
 
-    function editar($action, $id, $nombre, $password, $cargo)
+    function editar($action, $id)
     {
         return $this->consultar($action, $id);
     }
@@ -96,7 +108,7 @@ class Users
                     passwd = '{$clave}',
                     cargo='{$cargo}' 
 						WHERE idusuario = '{$id}'; ";
-        if ($this->bd->getPDO()->prepare($sql)) {
+        if ($this->bd->getPDO()->prepare($sql)->execute()) {
             return $this->consultar("agregar", "", "", "");
         } else {
             echo "error al ejecutar el script SQL";
@@ -106,7 +118,7 @@ class Users
     function borrar()
     {
         $sql = "DELETE FROM tusuarios WHERE idusuario=" . $_REQUEST['id'];
-        $this->bd->getPDO()->prepare($sql);
+        $this->bd->getPDO()->prepare($sql)->execute();
         return $this->consultar();
     }
 }

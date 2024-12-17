@@ -1,4 +1,5 @@
 <?php
+
 class Alumnos
 {
 	private $bd;
@@ -11,6 +12,7 @@ class Alumnos
 	{
 		$query = "SELECT * FROM talumnos";
 		$req = $this->bd->getPDO()->prepare($query);
+		$req->execute();
 
 		echo "<table border=1>
 				<caption> Alumnos </caption>
@@ -19,7 +21,10 @@ class Alumnos
 				  	<td class=\"bgblue\">Materias </td>
 					<td class=\"bgblue\" align=\"center\" colspan=\"2\">Acciones</td>    				  	
 					</tr>";
-		while ($row = $req->fetch(PDO::FETCH_OBJ)) {
+
+		$datos = $req->fetchAll(PDO::FETCH_OBJ);
+
+		foreach ($datos as $row) {
 			echo "<tr><td>" . $row->numcontrol . "</td>
 			  			  	<td>" . $row->nombre . "</td>
 							<td align=\"center\">--</td>
@@ -45,9 +50,9 @@ class Alumnos
 
 	function agregar($txtnombre, $txtnumctrl)
 	{
-		$sql = "INSERT INTO talumnos(nombre, numcontrol) VALUES('" . $txtnombre . "','" . $txtnumctrl . "')";
+		$sql = "INSERT INTO talumnos(nombre, numcontrol) VALUES('{$txtnombre}','{$txtnumctrl}');";
 		if ((trim($txtnombre) != '')	&& (trim($txtnumctrl) != '')) {
-			if ($consulta = mysqli_query($this->bd, $sql)) {
+			if ($this->bd->getPDO()->prepare($sql)->execute()) {
 				return $this->consultar("agregar", "", "", "");
 			} else {
 				echo "(agregar alumno) error al ejecutar el script SQL <br /> ";
@@ -64,8 +69,11 @@ class Alumnos
 
 	function guardar()
 	{
-		$sql = "UPDATE talumnos SET nombre='" . $_POST['txtnombre'] . "', numcontrol='" . $_POST['txtnumctrl'] . "' WHERE idalumno = " . $_POST['txtidalumno'];
-		if ($consulta = mysqli_query($this->bd, $sql)) {
+		$id = $_POST['txtidalumno'];
+		$nombre = $_POST['txtnombre'];
+		$numcontrol =  $_POST['txtnumctrl'];
+		$sql = "UPDATE talumnos SET nombre = '{$nombre}', numcontrol = '{$numcontrol}' WHERE idalumno = '{$id}'; ";
+		if ($this->bd->getPDO()->prepare($sql)->execute()) {
 			return $this->consultar("agregar", "", "", "");
 		} else {
 			echo "(guardar alumno) error al ejecutar el script SQL: ";
@@ -74,8 +82,9 @@ class Alumnos
 
 	function borrar()
 	{
-		$sql = "DELETE FROM talumnos WHERE idalumno=" . $_REQUEST['id'];
-		$consulta = mysqli_query($this->bd, $sql);
+		$id = $_POST['id'];
+		$sql = "DELETE FROM talumnos WHERE idalumno = '{$id}';";
+		$this->bd->getPDO()->prepare($sql)->execute();
 		return $this->consultar("agregar", "", "", "");
 	}
 }
