@@ -29,8 +29,7 @@ if (validaOpcion($opcionSeleccionada)) {
 	echo "<select name='unidad' id='" . $selectDestino . "'>";
 	echo "<option value='0'>seleccione una Unidad...</option>";
 	$i = 1;
-	$registro = $datos;
-	$total = $registro[0];
+	$total = $datos[0]->unidades;
 	while ($total >= $i) {
 		echo "<option value='" . $i . "'>Unidad " . $i . "</option>";
 		$i++;

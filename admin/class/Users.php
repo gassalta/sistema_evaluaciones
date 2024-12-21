@@ -1,4 +1,5 @@
 <?php
+
 class Users
 {
     private $bd;
@@ -11,6 +12,7 @@ class Users
     {
         $query = "SELECT * FROM tusuarios";
         $req = $this->bd->getPDO()->prepare($query);
+        $req->execute();
 
         echo "<table border=1>
 				<caption> Usuarios </caption>
@@ -32,15 +34,18 @@ class Users
         if (!empty($id)) {
             $query = "SELECT * FROM tusuarios WHERE idusuario = '{$id}';";
             $req = $this->bd->getPDO()->prepare($query);
+            $req->execute();
 
             if ($req->rowCount() != 0) {
                 while ($row = $req->fetch(PDO::FETCH_OBJ)) {
+                    // 2024-12-21: Se comenta el pass porque al hacer un update se encripta la clave y no se puede comparar con la clave encriptada
+                    // <tr><td>password:</td> <td><input type=\"password\" name=\"password\" value=\"" . $row->passwd . "\" size=\"12\"></td></tr>
                     echo "
                             <form name=\"frmagregar\" method=\"post\" action=\"users.php?action=$action\">
                             <input type=\"hidden\" name=\"id\" value=\"" . $id . "\">						
                                 <table border=0>								
                                     <tr><td>nombre: </td> <td><input type=\"text\" name=\"nombre\" value=\"" . $row->nombre . "\" size=\"40\"></td></tr>
-                                    <tr><td>password:</td> <td><input type=\"password\" name=\"password\" value=\"" . $row->passwd . "\" size=\"12\"></td></tr>
+                                    
                                     <tr><td>cargo:</td> <td><input type=\"text\" name=\"cargo\" value=\"" . $row->cargo . "\" size=\"40\"></td></tr>
                                     <tr><td></td>
                                             <td align=\"center\"><input type=\"submit\" name=\"agregar\" value=\"" . $action . "\">
@@ -71,15 +76,19 @@ class Users
 
     function agregar()
     {
-        $sql = "INSERT INTO tusuarios(nombre,passwd,cargo) VALUES('{$_POST['nombre']}', md5('{$_POST['password']}'),'{$_POST['cargo']}')";
-        if ($this->bd->getPDO()->prepare($sql)) {
+        $nombre = $_POST['nombre'];
+        $pass = $_POST['password'];
+        $cargo = $_POST['cargo'];
+
+        $sql = "INSERT INTO tusuarios(nombre,passwd,cargo) VALUES('{$nombre}', md5('{$pass}'),'{$cargo}')";
+        if ($this->bd->getPDO()->prepare($sql)->execute()) {
             return $this->consultar();
         } else {
             echo "error al ejecutar el script SQL";
         }
     }
 
-    function editar($action, $id, $nombre, $password, $cargo)
+    function editar($action, $id)
     {
         return $this->consultar($action, $id);
     }
@@ -88,15 +97,14 @@ class Users
     {
         $id =  $_POST['id'];
         $nombre = $_POST['nombre'];
-        $clave = md5($_POST['password']);
+        // $clave = md5($_POST['password']); -- passwd = '{$clave}',
         $cargo = $_POST['cargo'];
 
         $sql = "UPDATE tusuarios
                  SET nombre='{$nombre}',
-                    passwd = '{$clave}',
                     cargo='{$cargo}' 
 						WHERE idusuario = '{$id}'; ";
-        if ($this->bd->getPDO()->prepare($sql)) {
+        if ($this->bd->getPDO()->prepare($sql)->execute()) {
             return $this->consultar("agregar", "", "", "");
         } else {
             echo "error al ejecutar el script SQL";
@@ -106,7 +114,7 @@ class Users
     function borrar()
     {
         $sql = "DELETE FROM tusuarios WHERE idusuario=" . $_REQUEST['id'];
-        $this->bd->getPDO()->prepare($sql);
+        $this->bd->getPDO()->prepare($sql)->execute();
         return $this->consultar();
     }
 }

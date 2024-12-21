@@ -1,4 +1,5 @@
 <?php
+
 class Materias
 {
 	private $bd;
@@ -11,6 +12,7 @@ class Materias
 	{
 		$query = "SELECT idmateria, nombre, unidades FROM tmaterias";
 		$req =  $this->bd->getPDO()->prepare($query);
+		$req->execute();
 		echo "<table border=1>
 				<caption> Materias </caption>
 				<tr><td class=\"bgblue\">Clave</td>					  
@@ -19,6 +21,7 @@ class Materias
 					  <td class=\"bgblue\" align=\"center\" colspan=\"2\">Acciones</td>  
 				</tr>";
 		$datos = $req->fetchAll(PDO::FETCH_OBJ);
+
 		foreach ($datos as $row) {
 			echo "<tr>	 <td>" . $row->idmateria . "</td>						
 							 <td>" . $row->nombre . "</td>
@@ -41,8 +44,8 @@ class Materias
 
 	function agregar($nombre, $unidades)
 	{
-		$sql = "INSERT INTO tmaterias(nombre, unidades) VALUES('" . $nombre . "','" . $unidades . "')";
-		if ($consulta =  $this->bd->query($sql)) {
+		$sql = "INSERT INTO tmaterias(nombre, unidades) VALUES('{$nombre}','{$unidades}');";
+		if ($this->bd->getPDO()->prepare($sql)->execute()) {
 			return $this->consultar();
 		} else {
 			echo "error al agregar la materia";
@@ -56,16 +59,20 @@ class Materias
 
 	function guardar()
 	{
-		$sql = "UPDATE tmaterias SET nombre= '" . $_POST['nombre'] . "', unidades = " . $_POST['unidades'] . "' 
-						WHERE idmateria = " . $_REQUEST['id'];
-		$consulta =  $this->bd->query($sql);
+		$id = $_REQUEST['id'];
+		$nombre =  $_POST['nombre'];
+		$unidades = $_POST['unidades'];
+
+		$sql = "UPDATE tmaterias SET nombre = '{$nombre}', unidades = '{$unidades}' WHERE idmateria = '{$id}'; ";
+		$consulta =  $this->bd->getPDO()->prepare($sql)->execute();
 		return $this->consultar();
 	}
 
 	function borrar()
 	{
-		$sql = "DELETE FROM tmaterias WHERE idmateria = " . $_REQUEST['id'];
-		$consulta =  $this->bd->query($sql);
+		$id = $_REQUEST['id'];
+		$sql = "DELETE FROM tmaterias WHERE idmateria = '{$id}';";
+		$consulta =  $this->bd->getPDO()->prepare($sql)->execute();
 		return $this->consultar();
 	}
 }

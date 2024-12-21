@@ -54,7 +54,12 @@ define ("FORM_ERROR","num de control o clave de examen incorrectos");
 // etiquetas en botones
 define ("txtsubmit","Aceptar");
 define ("txtreset","Limpiar");
+define ("already_registered", "el alumno ya fue registrado en esta evaluación");
 
-define ("already_registered", "el alumno ya fue registrado en esta evaluación")
+// Pie de pagina
+define('COPYRIGHT', 'SEL © 2024');
+define('VERSION', 'v 1.1.1');
+
+
 
 ?>

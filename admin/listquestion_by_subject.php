@@ -15,10 +15,11 @@ if (!file_exists($langfile)) {
 	exit;
 }
 
-if (isset($_REQUEST['idmateria']))
+if (isset($_REQUEST['idmateria'])){
 	$idmateria = $_REQUEST['idmateria'];
-else
+} else{
 	$idmateria = 1;
+}
 
 
 echo "

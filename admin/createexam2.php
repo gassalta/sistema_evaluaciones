@@ -13,23 +13,66 @@ if (!file_exists($langfile)) {
   rep_error(FILE_NOT_FOUND);
   exit;
 }
-
-
-echo "
+?>
 <html>
+
 <head>
-<title>" . AppTitle . "</title>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\">
-<link rel=\"stylesheet\" href=\"../css/estilo.css\">
+  <title><?= AppTitle ?></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/estilo.css">
+
+  <style>
+    /* Diseño de contenedor padre usando Flexbox */
+    .container {
+      display: flex;
+      /* Activa Flexbox */
+      width: 100%;
+      /* Toma el ancho completo */
+      height: 100vh;
+      /* Toma el alto completo */
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Estilos para cada iframe */
+    .left-frame,
+    .right-frame {
+      flex: 1;
+      /* Divide el espacio en partes iguales */
+      border: none;
+      /* Elimina los bordes del iframe */
+    }
+
+    /* Opcional: Ajusta márgenes en el iframe derecho */
+    .right-frame {
+      margin-left: 10px;
+      /* Espaciado entre frames */
+    }
+  </style>
+
 </head>
 
-<frameset cols=\"50%,50%\" frameborder=\"NO\" border=\"0\" framespacing=\"0\" rows=\"*\">
-	<frame name=\"leftFrame\" scrolling=\"YES\" noresize src=\"listquestion_by_subject.php?idmateria=" . $_REQUEST['idmateria'] . "\">
-	<frame name=\"rightFrame\" marginwidth=\"10\" src=\"questionpapers_form.php?idmateria=" . $_REQUEST['idmateria'] . "\">
-</frameset>
+<body>
+  <?php
+  include BASE_URL_ADMIN.'/class/menu.php';
+  ?>
+  <div class="container">
+    <!-- Iframe izquierdo -->
+    <iframe
+      class="left-frame"
+      name="leftFrame"
+      src="listquestion_by_subject.php?idmateria=<?php echo htmlspecialchars($_REQUEST['idmateria']); ?>"
+      scrolling="yes">
+    </iframe>
 
-<noframes>
-<body >
+    <!-- Iframe derecho -->
+    <iframe
+      class="right-frame"
+      name="rightFrame"
+      src="questionpapers_form.php?idmateria=<?php echo htmlspecialchars($_REQUEST['idmateria']); ?>">
+    </iframe>
+  </div>
 </body>
-</noframes>
-</html>";
+
+</html>

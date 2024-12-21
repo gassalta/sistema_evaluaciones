@@ -45,7 +45,7 @@ class Examen
 
 		$sqllogin = "SELECT idalumno, numcontrol, nombre FROM talumnos WHERE numcontrol = '{$Nro_control}' LIMIT 1;";
 		$consulta = $this->db->getPDO()->prepare($sqllogin);
-
+		$consulta->execute();
 		if ($consulta->rowCount() != 0) {
 
 			while ($fila = $consulta->fetch(PDO::FETCH_OBJ)) {
@@ -53,7 +53,7 @@ class Examen
 
 				$sqllogin = "SELECT idexamen FROM texamenes WHERE claveexamen = '{$Id_examen}' LIMIT 1;";
 				$qConsulta = $this->db->getPDO()->prepare($sqllogin);
-
+				$qConsulta->execute();
 				if ($qConsulta->rowCount() != 0) {
 
 					while ($fila2 = $qConsulta->fetch(PDO::FETCH_OBJ)) {
@@ -61,7 +61,7 @@ class Examen
 
 						$sExam = "SELECT idexamen FROM tans1 WHERE idalumno= " . $idalumno . " AND idexamen = " . $idexamen;
 						$req = $this->db->getPDO()->prepare($sExam);
-						
+						$req->execute();
 						if ($req->rowCount() != 0) {
 							return $this->login_form(traducir_cadena("already_registered"));
 							exit;
