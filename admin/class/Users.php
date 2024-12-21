@@ -1,10 +1,5 @@
 <?php
 
-error_reporting(-1);
-ini_set('display_errors', -1);
-error_reporting(E_ALL | E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-
-
 class Users
 {
     private $bd;
@@ -43,12 +38,14 @@ class Users
 
             if ($req->rowCount() != 0) {
                 while ($row = $req->fetch(PDO::FETCH_OBJ)) {
+                    // 2024-12-21: Se comenta el pass porque al hacer un update se encripta la clave y no se puede comparar con la clave encriptada
+                    // <tr><td>password:</td> <td><input type=\"password\" name=\"password\" value=\"" . $row->passwd . "\" size=\"12\"></td></tr>
                     echo "
                             <form name=\"frmagregar\" method=\"post\" action=\"users.php?action=$action\">
                             <input type=\"hidden\" name=\"id\" value=\"" . $id . "\">						
                                 <table border=0>								
                                     <tr><td>nombre: </td> <td><input type=\"text\" name=\"nombre\" value=\"" . $row->nombre . "\" size=\"40\"></td></tr>
-                                    <tr><td>password:</td> <td><input type=\"password\" name=\"password\" value=\"" . $row->passwd . "\" size=\"12\"></td></tr>
+                                    
                                     <tr><td>cargo:</td> <td><input type=\"text\" name=\"cargo\" value=\"" . $row->cargo . "\" size=\"40\"></td></tr>
                                     <tr><td></td>
                                             <td align=\"center\"><input type=\"submit\" name=\"agregar\" value=\"" . $action . "\">
@@ -100,12 +97,11 @@ class Users
     {
         $id =  $_POST['id'];
         $nombre = $_POST['nombre'];
-        $clave = md5($_POST['password']);
+        // $clave = md5($_POST['password']); -- passwd = '{$clave}',
         $cargo = $_POST['cargo'];
 
         $sql = "UPDATE tusuarios
                  SET nombre='{$nombre}',
-                    passwd = '{$clave}',
                     cargo='{$cargo}' 
 						WHERE idusuario = '{$id}'; ";
         if ($this->bd->getPDO()->prepare($sql)->execute()) {

@@ -97,15 +97,16 @@ if ($_SESSION['admin'] == 'registered') {
 					<td class="bggray">unidad</td>
 					<td>
 						<?php
-						if (($action == 'edit') || (isset($subjectidedit))) {
+						if (($action == 'edit') || !(isset($subjectidedit))) {
 							$sql = "SELECT unidades FROM tmaterias WHERE idmateria = '$subjectidedit'";
 							$req = $db->getPDO()->prepare($sql);
 							$req->execute();
 
-							echo "<select name='unidad' id='select2'>";
 							$i = 1;
 							$registro = $req->fetch(PDO::FETCH_NUM);
 							$total = $registro[0];
+							
+							echo "<select name='unidad' id='select2'>";
 							while ($total >= $i) {
 								echo "<option value=\"$i\"";
 								if ($i == $unit) echo "selected";
